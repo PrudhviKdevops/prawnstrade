@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PrawnTrade — Business Management</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦐</text></svg>" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css" />
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          heading: ['Poppins', 'sans-serif'],
+          body: ['Inter', 'sans-serif'],
+        },
+        colors: {
+          teal: { 50:'#f0fdfa',100:'#ccfbf1',200:'#99f6e4',300:'#5eead4',400:'#2dd4bf',500:'#14b8a6',600:'#0d9488',700:'#0f766e',800:'#115e59',900:'#134e4a' },
+          coral: { 50:'#fff5f2',100:'#ffe4dc',200:'#ffc4b3',300:'#ff9d80',400:'#ff7a52',500:'#f4623a',600:'#dd4a24',700:'#b8391a' },
+          ink: { 50:'#f7f8fa',100:'#eef0f4',200:'#dde1e8',300:'#c3c9d4',400:'#98a1b3',500:'#707a90',600:'#525c72',700:'#3c445a',800:'#252b3b',900:'#171b26' },
+        },
+        boxShadow: {
+          soft: '0 2px 10px rgba(15, 118, 110, 0.06), 0 1px 2px rgba(15,118,110,0.04)',
+          card: '0 8px 30px rgba(15, 118, 110, 0.08)',
+          pop: '0 20px 60px rgba(15, 23, 42, 0.18)',
+        }
+      }
+    }
+  }
+</script>
+</head>
+<body class="font-body bg-ink-50 text-ink-800 antialiased">
+
+  <!-- ============ LOGIN SCREEN ============ -->
+  <div id="loginScreen" class="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-teal-800 via-teal-700 to-teal-900">
+    <div class="absolute inset-0 opacity-20 wave-bg"></div>
+    <div class="absolute -top-24 -left-24 w-96 h-96 bg-coral-400 rounded-full blur-3xl opacity-20"></div>
+    <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-teal-300 rounded-full blur-3xl opacity-20"></div>
+
+    <div class="relative z-10 w-full max-w-md mx-4">
+      <div class="bg-white/95 backdrop-blur rounded-3xl shadow-pop p-10">
+        <div class="text-center mb-8">
+          <div class="text-6xl mb-3 animate-bounce-slow">🦐</div>
+          <h1 class="font-heading text-2xl font-800 text-teal-800 tracking-tight" style="font-weight:800;">PrawnTrade</h1>
+          <p class="text-ink-500 text-sm mt-1 tracking-wide">Manage · Track · Earn</p>
+        </div>
+        <form id="loginForm" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-ink-600 mb-1.5 uppercase tracking-wide">Username</label>
+            <input id="loginUsername" type="text" required autocomplete="username"
+              class="w-full px-4 py-3 rounded-xl border border-ink-200 focus:border-teal-500 focus:ring-4 focus:ring-teal-100 outline-none transition" placeholder="admin" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-ink-600 mb-1.5 uppercase tracking-wide">Password</label>
+            <input id="loginPassword" type="password" required autocomplete="current-password"
+              class="w-full px-4 py-3 rounded-xl border border-ink-200 focus:border-teal-500 focus:ring-4 focus:ring-teal-100 outline-none transition" placeholder="••••••••" />
+          </div>
+          <div id="loginError" class="hidden text-sm text-coral-600 bg-coral-50 border border-coral-200 rounded-lg px-3 py-2"></div>
+          <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-semibold shadow-soft transition transform hover:-translate-y-0.5">
+            Login
+          </button>
+        </form>
+        <p class="text-center text-xs text-ink-400 mt-6">Farmer &amp; Exporter Purchase, Sales &amp; Commission Management</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ APP SHELL ============ -->
+  <div id="appShell" class="hidden min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-64 shrink-0 bg-teal-900 text-teal-50 flex-col hidden lg:flex">
+      <div class="px-6 py-6 flex items-center gap-3 border-b border-teal-800">
+        <span class="text-3xl">🦐</span>
+        <div>
+          <div class="font-heading font-700 text-lg leading-tight" style="font-weight:700;">PrawnTrade</div>
+          <div class="text-[11px] text-teal-300">Business Management</div>
+        </div>
+      </div>
+      <nav id="sidebarNav" class="flex-1 px-3 py-4 space-y-1 overflow-y-auto"></nav>
+      <div class="px-4 py-4 border-t border-teal-800">
+        <div class="flex items-center justify-between text-xs text-teal-300 mb-2">
+          <span id="sidebarUsername">—</span>
+          <button id="logoutBtn" class="text-coral-300 hover:text-coral-200 font-medium">Logout</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Mobile top bar -->
+    <div class="lg:hidden fixed top-0 inset-x-0 z-30 bg-teal-900 text-white flex items-center justify-between px-4 py-3 shadow-md">
+      <div class="flex items-center gap-2">
+        <span class="text-2xl">🦐</span>
+        <span class="font-heading font-700" style="font-weight:700;">PrawnTrade</span>
+      </div>
+      <button id="mobileMenuBtn" class="p-2 rounded-lg hover:bg-teal-800">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div id="mobileNavPanel" class="hidden fixed inset-0 z-40 bg-teal-900/98 text-white p-6 pt-20 overflow-y-auto lg:hidden">
+      <nav id="mobileNav" class="space-y-1"></nav>
+      <div class="mt-8 pt-6 border-t border-teal-800 flex items-center justify-between text-sm">
+        <span id="mobileSidebarUsername" class="text-teal-300">—</span>
+        <button id="mobileLogoutBtn" class="text-coral-300 font-medium">Logout</button>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <main class="flex-1 min-w-0 pt-16 lg:pt-0">
+      <div id="viewContainer" class="p-4 sm:p-6 lg:p-8 max-w-[1600px] mx-auto"></div>
+    </main>
+  </div>
+
+  <!-- ============ MODAL ROOT ============ -->
+  <div id="modalRoot"></div>
+
+  <!-- ============ TOAST ============ -->
+  <div id="toastRoot" class="fixed bottom-5 right-5 z-[100] space-y-2"></div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
